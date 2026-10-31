@@ -1,0 +1,3210 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laptops - Your Trusted Laptop Store & Admin Panel</title>
+    <!-- FontAwesome for high-fidelity icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #070d19;
+            --surface-dark: #0f172a;
+            --card-dark: #162036;
+            --card-dark-hover: #1e293b;
+            --border-dark: #22324e;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --tech-blue: #2563eb;
+            --tech-blue-bright: #3b82f6;
+            --tech-blue-glow: rgba(37, 99, 235, 0.25);
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-cyan: #06b6d4;
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            --header-bg: #0b1329;
+            --nav-bg: #0b1329;
+            --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+        }
+
+        /* Dynamic Theme Palettes */
+        body[data-theme="RED"] {
+            --tech-blue: #dc2626;
+            --tech-blue-bright: #ef4444;
+            --tech-blue-glow: rgba(239, 68, 68, 0.25);
+            --primary-gradient: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+        body[data-theme="GREEN"] {
+            --tech-blue: #059669;
+            --tech-blue-bright: #10b981;
+            --tech-blue-glow: rgba(16, 185, 129, 0.25);
+            --primary-gradient: linear-gradient(135deg, #059669 0%, #065f46 100%);
+        }
+        body[data-theme="UNICORN"] {
+            --tech-blue: #9333ea;
+            --tech-blue-bright: #a855f7;
+            --tech-blue-glow: rgba(168, 85, 247, 0.25);
+            --primary-gradient: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+        }
+        body[data-theme="GOLD"] {
+            --tech-blue: #d97706;
+            --tech-blue-bright: #f59e0b;
+            --tech-blue-glow: rgba(245, 158, 11, 0.25);
+            --primary-gradient: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        }
+        body[data-theme="CYAN"] {
+            --tech-blue: #0284c7;
+            --tech-blue-bright: #06b6d4;
+            --tech-blue-glow: rgba(6, 182, 212, 0.25);
+            --primary-gradient: linear-gradient(135deg, #0284c7 0%, #0e7490 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #030712;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* App Mobile Shell Container */
+        #app-shell {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background-color: var(--bg-deep);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 74px; /* Space for bottom nav */
+        }
+
+        /* Header Bar */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(12px);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .brand-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 19px;
+            box-shadow: 0 4px 14px var(--tech-blue-glow);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .brand-icon-box:active {
+            transform: scale(0.92);
+        }
+
+        .brand-texts h1 {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .brand-texts p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-dark);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.92);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .badge-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-red);
+            border: 2px solid var(--header-bg);
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 12px 16px 8px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-wrapper i.fa-search {
+            position: absolute;
+            left: 14px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            height: 44px;
+            background-color: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 22px;
+            padding: 0 42px 0 38px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-input-wrapper input:focus {
+            border-color: var(--tech-blue-bright);
+            box-shadow: 0 0 0 3px var(--tech-blue-glow);
+        }
+
+        .search-clear-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: none;
+            font-size: 14px;
+            padding: 4px;
+        }
+
+        /* 10-SLOT CAROUSEL SYSTEM (Fixed no freeze / no halfway snap) */
+        .carousel-section {
+            padding: 4px 16px 12px;
+            position: relative;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-dark);
+            background: #0b1120;
+            user-select: none;
+            touch-action: pan-y pinch-zoom;
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            padding: 18px 20px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        /* 300x250 Medium Rectangle Ad Slot styling */
+        .carousel-slide.ad-slot-slide {
+            min-height: 200px;
+            padding: 16px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .ad-unit-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            color: #38bdf8;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .ad-300x250-box {
+            width: 100%;
+            max-width: 300px;
+            height: 130px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+        }
+
+        .ad-300x250-box i {
+            font-size: 28px;
+            color: #38bdf8;
+        }
+
+        .ad-unit-id-code {
+            font-family: monospace;
+            font-size: 10px;
+            background: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5f3fc;
+            word-break: break-all;
+        }
+
+        .banner-badge {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .banner-title {
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .banner-subtitle {
+            font-size: 12px;
+            opacity: 0.88;
+            line-height: 1.4;
+            max-width: 90%;
+            margin-bottom: 14px;
+        }
+
+        .banner-cta {
+            align-self: flex-start;
+            padding: 8px 16px;
+            background: #ffffff;
+            color: #0b0f19;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.15s, background 0.15s;
+        }
+
+        .banner-cta:active {
+            transform: scale(0.95);
+        }
+
+        .carousel-indicator-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .indicator-dot.active {
+            width: 22px;
+            background: var(--tech-blue-bright);
+        }
+
+        .carousel-timer-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 9px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #94a3b8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        /* Chips & Filters */
+        .filter-section {
+            padding: 4px 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chips-scroll-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 2px;
+        }
+
+        .chips-scroll-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip-pill {
+            padding: 6px 14px;
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .chip-pill.active {
+            background: var(--tech-blue);
+            color: #ffffff;
+            border-color: var(--tech-blue-bright);
+            box-shadow: 0 2px 10px var(--tech-blue-glow);
+        }
+
+        .condition-filter-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .condition-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .condition-pill {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-dark);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .condition-pill.active {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--tech-blue-bright);
+            border-color: var(--tech-blue);
+        }
+
+        /* Trust & Pickup Guarantee Card */
+        .guarantee-card {
+            margin: 4px 16px 14px;
+            padding: 12px 14px;
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .guarantee-icon {
+            font-size: 24px;
+            color: #38bdf8;
+            margin-top: 2px;
+        }
+
+        .guarantee-content h4 {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #f0fdf4;
+            margin-bottom: 2px;
+        }
+
+        .guarantee-content p {
+            font-size: 11px;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        /* Section Title Row */
+        .section-header-row {
+            padding: 0 16px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header-row h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-badge-info {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        /* Products Grid (2 Columns on mobile) */
+        .products-grid {
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .product-card {
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            border-color: var(--tech-blue-bright);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .product-card-top {
+            position: relative;
+            width: 100%;
+            height: 130px;
+            background: #0d1527;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
+        .badge-condition-pill {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 9.5px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-condition-pill.new {
+            background: rgba(16, 185, 129, 0.9);
+            color: #ffffff;
+        }
+        .badge-condition-pill.used {
+            background: rgba(245, 158, 11, 0.9);
+            color: #ffffff;
+        }
+        .badge-condition-pill.refurbished {
+            background: rgba(59, 130, 246, 0.9);
+            color: #ffffff;
+        }
+
+        .badge-stock-pill {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.75);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-stock-pill.out {
+            color: var(--accent-red);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .product-body {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product-specs-chip {
+            font-size: 10.5px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10.5px;
+            color: var(--accent-amber);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .product-rating span {
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .product-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .current-price {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .original-price {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .product-btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .btn-card-action {
+            height: 32px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.15s;
+        }
+
+        .btn-details {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border: 1px solid var(--border-dark);
+        }
+
+        .btn-buy-now {
+            background: var(--tech-blue);
+            color: #ffffff;
+        }
+
+        .btn-buy-now:hover {
+            background: var(--tech-blue-bright);
+        }
+
+        /* Empty State */
+        .empty-state-box {
+            grid-column: 1 / -1;
+            padding: 40px 20px;
+            text-align: center;
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+
+        .empty-state-box i {
+            font-size: 36px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: 64px;
+            background: var(--nav-bg);
+            border-top: 1px solid var(--border-dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 20%;
+            height: 100%;
+            position: relative;
+            transition: color 0.15s;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            transition: transform 0.15s;
+        }
+
+        .nav-item.active {
+            color: var(--tech-blue-bright);
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-cart-badge {
+            position: absolute;
+            top: 10px;
+            right: 24px;
+            background: var(--accent-red);
+            color: white;
+            font-size: 9px;
+            font-weight: 800;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* MODALS & SLIDE-OVERS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .bottom-sheet {
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh;
+            background: var(--surface-dark);
+            border-top-left-radius: var(--radius-xl);
+            border-top-right-radius: var(--radius-xl);
+            border-top: 1px solid var(--border-dark);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            animation: slideUp 0.25s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--border-dark);
+            border-radius: 2px;
+            margin: 0 auto 12px;
+        }
+
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .sheet-header h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .close-sheet-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* Product Detail Modal contents */
+        .detail-img-box {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: #070d19;
+            margin-bottom: 12px;
+        }
+
+        .detail-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detail-specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            background: var(--card-dark);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            font-size: 12px;
+        }
+
+        .detail-specs-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .detail-specs-table td:first-child {
+            color: var(--text-secondary);
+            font-weight: 600;
+            width: 35%;
+        }
+
+        .detail-specs-table td:last-child {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .checklist-guarantee {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            margin: 10px 0 16px;
+        }
+
+        .checklist-guarantee h5 {
+            color: var(--accent-green);
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .checklist-guarantee ul {
+            list-style: none;
+            font-size: 11px;
+            color: #d1fae5;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .checklist-guarantee li i {
+            color: var(--accent-green);
+            margin-right: 6px;
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 42px;
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            padding: 0 12px;
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--tech-blue-bright);
+        }
+
+        textarea.form-control {
+            height: 70px;
+            padding: 8px 12px;
+            resize: none;
+        }
+
+        .btn-full {
+            width: 100%;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--tech-blue);
+            color: #ffffff;
+            font-size: 13.5px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px var(--tech-blue-glow);
+        }
+
+        .btn-full:active {
+            transform: scale(0.98);
+        }
+
+        /* Cart Drawer Items */
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .cart-item-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #0d1527;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-info h4 {
+            font-size: 12.5px;
+            font-weight: 700;
+        }
+
+        .cart-item-info p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .cart-qty-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card-dark);
+            border-radius: 6px;
+            padding: 2px 6px;
+            border: 1px solid var(--border-dark);
+        }
+
+        .cart-qty-ctrl button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Order Success Modal */
+        .success-box {
+            text-align: center;
+            padding: 24px 10px;
+        }
+
+        .success-box i {
+            font-size: 50px;
+            color: var(--accent-green);
+            margin-bottom: 12px;
+        }
+
+        .success-box h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .success-order-id {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 6px;
+            margin: 8px 0 14px;
+        }
+
+        /* ================= ADMIN PANEL STYLES ================= */
+        #admin-panel-container {
+            display: none;
+            padding: 14px;
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-dark);
+            margin-bottom: 14px;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-brand i {
+            color: var(--accent-red);
+            font-size: 20px;
+        }
+
+        .admin-badge {
+            font-size: 10px;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            font-weight: 700;
+        }
+
+        .admin-tabs-nav {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            margin-bottom: 14px;
+            padding-bottom: 4px;
+        }
+
+        .admin-tab-btn {
+            padding: 6px 12px;
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .admin-tab-btn.active {
+            background: var(--accent-red);
+            color: white;
+            border-color: #dc2626;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-md);
+            padding: 12px;
+        }
+
+        .stat-card p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .stat-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-top: 4px;
+            color: var(--text-primary);
+        }
+
+        /* Banner Slot Manager Cards */
+        .slot-manage-card {
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .slot-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .slot-num-badge {
+            font-size: 10px;
+            font-weight: 800;
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--tech-blue-bright);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--tech-blue);
+        }
+
+        .slot-num-badge.ad {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-amber);
+            border-color: var(--accent-amber);
+        }
+
+        /* Theme Picker Buttons */
+        .theme-color-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .theme-card-option {
+            background: var(--card-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            margin: 0 auto 6px;
+        }
+
+        /* Toast feedback */
+        #toast-box {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e293b;
+            color: #ffffff;
+            border: 1px solid #334155;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 12.5px;
+            font-weight: 600;
+            z-index: 999;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            max-width: 90%;
+        }
+
+        #toast-box.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body data-theme="BLUE">
+
+<div id="app-shell">
+
+    <!-- ================= USER STOREFRONT ================= -->
+    <div id="user-storefront">
+        <!-- Top App Bar -->
+        <header class="app-header">
+            <div class="header-brand" id="brand-header-click" title="Tap 3 times for Admin Unlock">
+                <div class="brand-icon-box">
+                    <i class="fa-solid fa-laptop"></i>
+                </div>
+                <div class="brand-texts">
+                    <h1 id="store-title-display">Laptops</h1>
+                    <p id="store-tagline-display">Your Trusted Laptop Store</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="notifications-btn" title="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn" id="secret-lock-btn" title="Admin Security Lock">
+                    <i class="fa-solid fa-shield-halved" style="color: #ef4444;"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="store-search-input" placeholder="Search laptops, accessories, specs...">
+                <button class="search-clear-btn" id="search-clear-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 10-Slot Banner Carousel System (6 Custom + 4 Auto Ad Units) -->
+        <section class="carousel-section">
+            <div class="carousel-container" id="carousel-box">
+                <div class="carousel-track" id="carousel-track">
+                    <!-- Carousel slides injected via JS -->
+                </div>
+                <div class="carousel-timer-badge" id="carousel-timer-indicator">
+                    <i class="fa-solid fa-rotate"></i> Auto <span id="timer-sec-val">5s</span>
+                </div>
+            </div>
+            <!-- Slide Indicator Dots -->
+            <div class="carousel-indicator-bar" id="carousel-indicators"></div>
+        </section>
+
+        <!-- Category Chips -->
+        <section class="filter-section">
+            <div class="chips-scroll-row" id="category-chips-row">
+                <div class="chip-pill active" data-cat="All">All</div>
+                <div class="chip-pill" data-cat="Laptops">Laptops</div>
+                <div class="chip-pill" data-cat="Accessories">Accessories</div>
+                <div class="chip-pill" data-cat="SSD/HDD">SSD/HDD</div>
+                <div class="chip-pill" data-cat="Dongles">Dongles</div>
+            </div>
+
+            <!-- Condition Filter -->
+            <div class="condition-filter-row">
+                <span class="condition-label">Condition:</span>
+                <div class="condition-pill active" data-cond="All">All</div>
+                <div class="condition-pill" data-cond="New">New</div>
+                <div class="condition-pill" data-cond="Used">Used</div>
+                <div class="condition-pill" data-cond="Refurbished">Refurbished</div>
+            </div>
+        </section>
+
+        <!-- 100% Pickup & Material Guarantee Card -->
+        <div class="guarantee-card">
+            <div class="guarantee-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="guarantee-content">
+                <h4>100% Pickup & Material Guarantee</h4>
+                <p>Aapka laptop chuni hui date par shop par ready milega. Test karke payment karein!</p>
+            </div>
+        </div>
+
+        <!-- Section Title & In-Stock Count -->
+        <div class="section-header-row">
+            <h3>Featured Products (<span id="products-count-num">0</span>)</h3>
+            <span class="section-badge-info">100% In Stock</span>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="products-grid">
+            <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Accessories Specific View (Shown when Accessories Tab is selected) -->
+        <div id="accessories-view-container" style="display: none; padding: 0 16px;">
+            <div class="section-header-row" style="padding: 10px 0;">
+                <h3>Computer & Laptop Accessories</h3>
+                <span class="section-badge-info">Genuine Stock</span>
+            </div>
+            <div class="products-grid" id="accessories-grid"></div>
+        </div>
+
+        <!-- User Profile View (Shown when Profile Tab is selected) -->
+        <div id="profile-view-container" style="display: none; padding: 16px;">
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-lg); padding: 18px; text-align: center; margin-bottom: 16px;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; margin: 0 auto 10px;">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h3 style="font-size: 16px; font-weight: 800;" id="user-display-name">Rohit Kumar</h3>
+                <p style="font-size: 12px; color: var(--text-secondary);" id="user-display-phone">+91 9876543210</p>
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; margin-top: 8px;">
+                    <i class="fa-solid fa-check-circle"></i> Google Account Linked
+                </div>
+            </div>
+
+            <!-- Recent Orders Section -->
+            <div class="section-header-row" style="padding: 0 0 10px;">
+                <h3>My Orders & Reservations</h3>
+            </div>
+            <div id="user-orders-list" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Populated via JS -->
+            </div>
+
+            <!-- Direct Admin Entry Box from Profile -->
+            <div style="margin-top: 24px; padding: 14px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); text-align: center;">
+                <h4 style="font-size: 13px; color: #ef4444; margin-bottom: 4px;">Shop Manager Portal</h4>
+                <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">Enter secret Master PIN to open store admin panel</p>
+                <button class="btn-full" id="profile-admin-unlock-btn" style="background: #ef4444; height: 38px;">
+                    <i class="fa-solid fa-lock"></i> Open Admin Panel
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= ADMIN PANEL INTERFACE ================= -->
+    <div id="admin-panel-container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <div class="admin-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div>
+                    <h2 style="font-size: 15px; font-weight: 800;">Laptops Admin Panel</h2>
+                    <span class="admin-badge">SECRET ACCESS UNLOCKED</span>
+                </div>
+            </div>
+            <button class="icon-btn" id="exit-admin-btn" title="Exit Admin Back to Store">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+        </div>
+
+        <!-- Admin Sub Navigation Tabs -->
+        <div class="admin-tabs-nav">
+            <button class="admin-tab-btn active" data-atab="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+            <button class="admin-tab-btn" data-atab="banners"><i class="fa-solid fa-images"></i> 10 Banners & Ads</button>
+            <button class="admin-tab-btn" data-atab="add-product"><i class="fa-solid fa-plus-circle"></i> Add Product</button>
+            <button class="admin-tab-btn" data-atab="products"><i class="fa-solid fa-boxes-stacked"></i> Products</button>
+            <button class="admin-tab-btn" data-atab="orders"><i class="fa-solid fa-receipt"></i> Orders</button>
+            <button class="admin-tab-btn" data-atab="theme"><i class="fa-solid fa-palette"></i> Theme & Config</button>
+            <button class="admin-tab-btn" data-atab="broadcast"><i class="fa-solid fa-bullhorn"></i> Push Alert</button>
+        </div>
+
+        <!-- 1. Admin Dashboard View -->
+        <div id="atab-dashboard-view">
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <p>Total Products</p>
+                    <h3 id="stat-total-products">11</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Total Orders</p>
+                    <h3 id="stat-total-orders">4</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Total Views</p>
+                    <h3>3,482</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Total Revenue</p>
+                    <h3 id="stat-total-revenue">₹ 1,24,560</h3>
+                </div>
+            </div>
+
+            <!-- Quick Action Card -->
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+                <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Active Store Settings</h4>
+                <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">
+                    Banner interval: <strong id="dash-banner-interval-text" style="color: var(--tech-blue-bright)">5 Seconds</strong> | Active Slots: <strong>10</strong>
+                </p>
+                <button class="btn-full" onclick="switchAdminTab('banners')">
+                    <i class="fa-solid fa-sliders"></i> Edit Carousel & 300x250 Ad Units
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. Admin 10-Slot Banner & Ad Units Manager -->
+        <div id="atab-banners-view" style="display: none;">
+            <!-- Global Timer Setting -->
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-primary); display: block; margin-bottom: 6px;">
+                    <i class="fa-solid fa-clock"></i> Carousel Auto-Swipe Interval:
+                </label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <select id="admin-banner-interval-select" class="form-control" style="flex-grow: 1;">
+                        <option value="3">3 Seconds (Fast)</option>
+                        <option value="5" selected>5 Seconds (Default / Recommended)</option>
+                        <option value="8">8 Seconds</option>
+                        <option value="10">10 Seconds</option>
+                        <option value="15">15 Seconds</option>
+                        <option value="30">30 Seconds</option>
+                        <option value="60">1 Minute</option>
+                    </select>
+                    <button class="btn-full" id="save-interval-btn" style="width: auto; padding: 0 16px;">
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 10px;">10 Carousel Slots Management</h3>
+            <div id="admin-banner-slots-list">
+                <!-- Dynamically rendered: Slots 1-6 Custom, Slots 7-10 Auto Ads -->
+            </div>
+        </div>
+
+        <!-- 3. Add Product View -->
+        <div id="atab-add-product-view" style="display: none;">
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-md); padding: 14px;">
+                <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 12px;">Add New Laptop or Accessory</h3>
+                <form id="add-product-form">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" id="add-prod-name" class="form-control" placeholder="e.g. Dell Latitude 7490" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="add-prod-category" class="form-control">
+                                <option value="Laptop">Laptop</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="SSD/HDD">SSD/HDD</option>
+                                <option value="Dongles">Dongles</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Condition</label>
+                            <select id="add-prod-condition" class="form-control">
+                                <option value="Used">Used</option>
+                                <option value="Refurbished">Refurbished</option>
+                                <option value="New">New</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label>Selling Price (₹)</label>
+                            <input type="number" id="add-prod-price" class="form-control" placeholder="21999" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Original MRP (₹)</label>
+                            <input type="number" id="add-prod-mrp" class="form-control" placeholder="32999">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Specs (Processor / Interface)</label>
+                        <input type="text" id="add-prod-processor" class="form-control" placeholder="e.g. Intel Core i5 8th Gen">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label>RAM</label>
+                            <input type="text" id="add-prod-ram" class="form-control" placeholder="e.g. 16GB DDR4">
+                        </div>
+                        <div class="form-group">
+                            <label>Storage</label>
+                            <input type="text" id="add-prod-storage" class="form-control" placeholder="e.g. 512GB SSD">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Display / Screen Details</label>
+                        <input type="text" id="add-prod-display" class="form-control" placeholder="e.g. 14 inch FHD Anti-Glare">
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="add-prod-image" class="form-control" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="add-prod-desc" class="form-control" placeholder="Full details, health condition, ports..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-full" style="background: var(--accent-green);">
+                        <i class="fa-solid fa-save"></i> Save Product to Catalog
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 4. Manage Products View -->
+        <div id="atab-products-view" style="display: none;">
+            <div class="search-input-wrapper" style="margin-bottom: 12px;">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="admin-product-search" placeholder="Filter existing products...">
+            </div>
+            <div id="admin-products-list" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- 5. Orders Management View -->
+        <div id="atab-orders-view" style="display: none;">
+            <div style="display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto;">
+                <button class="condition-pill active" onclick="filterAdminOrders('All', this)">All</button>
+                <button class="condition-pill" onclick="filterAdminOrders('Pending', this)">Pending</button>
+                <button class="condition-pill" onclick="filterAdminOrders('Processing', this)">Processing</button>
+                <button class="condition-pill" onclick="filterAdminOrders('Delivered', this)">Delivered</button>
+            </div>
+            <div id="admin-orders-list" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- 6. Theme Settings & Store Config -->
+        <div id="atab-theme-view" style="display: none;">
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+                <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 10px;">Store Theme Customization</h3>
+                <p style="font-size: 11px; color: var(--text-secondary);">Select live accent color for user storefront</p>
+                <div class="theme-color-grid">
+                    <div class="theme-card-option" onclick="applyTheme('BLUE')">
+                        <div class="theme-circle" style="background: #2563eb;"></div>
+                        <span style="font-size: 11px; font-weight: 700;">Tech Blue</span>
+                    </div>
+                    <div class="theme-card-option" onclick="applyTheme('RED')">
+                        <div class="theme-circle" style="background: #ef4444;"></div>
+                        <span style="font-size: 11px; font-weight: 700;">Crimson</span>
+                    </div>
+                    <div class="theme-card-option" onclick="applyTheme('GREEN')">
+                        <div class="theme-circle" style="background: #10b981;"></div>
+                        <span style="font-size: 11px; font-weight: 700;">Emerald</span>
+                    </div>
+                    <div class="theme-card-option" onclick="applyTheme('UNICORN')">
+                        <div class="theme-circle" style="background: linear-gradient(135deg, #9333ea, #ec4899);"></div>
+                        <span style="font-size: 11px; font-weight: 700;">Unicorn</span>
+                    </div>
+                    <div class="theme-card-option" onclick="applyTheme('GOLD')">
+                        <div class="theme-circle" style="background: #f59e0b;"></div>
+                        <span style="font-size: 11px; font-weight: 700;">Cyber Gold</span>
+                    </div>
+                    <div class="theme-card-option" onclick="applyTheme('CYAN')">
+                        <div class="theme-circle" style="background: #06b6d4;"></div>
+                        <span style="font-size: 11px; font-weight: 700;">Neon Cyan</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store Brand Texts -->
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-md); padding: 14px;">
+                <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 10px;">Store Header & Branding</h3>
+                <div class="form-group">
+                    <label>Store Title</label>
+                    <input type="text" id="config-store-title" class="form-control" value="Laptops">
+                </div>
+                <div class="form-group">
+                    <label>Tagline</label>
+                    <input type="text" id="config-store-tagline" class="form-control" value="Your Trusted Laptop Store">
+                </div>
+                <button class="btn-full" onclick="saveStoreBranding()">
+                    <i class="fa-solid fa-check"></i> Update Store Branding
+                </button>
+            </div>
+        </div>
+
+        <!-- 7. Push Notification Broadcast -->
+        <div id="atab-broadcast-view" style="display: none;">
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-md); padding: 14px;">
+                <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 12px;">Broadcast Push Notification</h3>
+                <div class="form-group">
+                    <label>Notification Title</label>
+                    <input type="text" id="broadcast-title" class="form-control" placeholder="e.g. ⚡ Flash Sale: 20% Off Refurbished ThinkPads!">
+                </div>
+                <div class="form-group">
+                    <label>Message Content</label>
+                    <textarea id="broadcast-message" class="form-control" placeholder="Type notification message to display in store..."></textarea>
+                </div>
+                <button class="btn-full" onclick="sendBroadcastNotification()" style="background: var(--tech-blue);">
+                    <i class="fa-solid fa-paper-plane"></i> Send Notification
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Fixed on mobile) -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-tab="home">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-tab="category">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span>Category</span>
+        </button>
+        <button class="nav-item" data-tab="accessories">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>Accessories</span>
+        </button>
+        <button class="nav-item" data-tab="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Cart</span>
+            <span class="nav-cart-badge" id="cart-badge-count" style="display: none;">0</span>
+        </button>
+        <button class="nav-item" data-tab="profile">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </button>
+    </nav>
+</div>
+
+<!-- ================= MODALS & OVERLAYS ================= -->
+
+<!-- 1. Admin Master PIN Lock Modal -->
+<div class="modal-overlay" id="pin-modal">
+    <div class="bottom-sheet" style="padding: 20px;">
+        <div class="sheet-handle"></div>
+        <div style="text-align: center; margin-bottom: 16px;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 10px;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3 style="font-size: 17px; font-weight: 800;">Admin Secret Access</h3>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Enter Master Security PIN (Default: <strong>7890</strong> or <strong>9830</strong>)</p>
+        </div>
+        <div class="form-group">
+            <input type="password" id="admin-pin-input" class="form-control" style="text-align: center; font-size: 24px; letter-spacing: 6px; height: 50px;" maxlength="6" placeholder="••••" autofocus>
+        </div>
+        <button class="btn-full" id="submit-pin-btn" style="background: #ef4444; height: 46px;">
+            <i class="fa-solid fa-unlock-keyhole"></i> Verify & Open Admin
+        </button>
+        <button class="btn-full" style="background: none; border: 1px solid var(--border-dark); margin-top: 8px; color: var(--text-secondary);" onclick="closeModal('pin-modal')">
+            Cancel
+        </button>
+    </div>
+</div>
+
+<!-- 2. Product Detail Sheet Modal -->
+<div class="modal-overlay" id="product-detail-modal">
+    <div class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h3 id="modal-prod-title">Dell Latitude 7490</h3>
+            <button class="close-sheet-btn" onclick="closeModal('product-detail-modal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="detail-img-box">
+            <img id="modal-prod-img" src="" alt="Laptop Image">
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 20px; font-weight: 800;" id="modal-prod-price">₹ 21,999</span>
+                <span style="font-size: 13px; color: var(--text-muted); text-decoration: line-through;" id="modal-prod-mrp">₹ 32,999</span>
+            </div>
+            <span class="badge-condition-pill used" id="modal-prod-cond-badge">USED</span>
+        </div>
+
+        <table class="detail-specs-table">
+            <tr>
+                <td>Processor / Core</td>
+                <td id="modal-prod-cpu">Intel Core i5 8th Gen</td>
+            </tr>
+            <tr>
+                <td>RAM Memory</td>
+                <td id="modal-prod-ram">8GB DDR4</td>
+            </tr>
+            <tr>
+                <td>Hard Disk / SSD</td>
+                <td id="modal-prod-storage">256GB SSD</td>
+            </tr>
+            <tr>
+                <td>Display & Resolution</td>
+                <td id="modal-prod-display">14" Anti-Glare FHD</td>
+            </tr>
+            <tr>
+                <td>Stock Status</td>
+                <td id="modal-prod-stock" style="color: var(--accent-green);">In Stock & Verified</td>
+            </tr>
+        </table>
+
+        <!-- 100% Quality Checklist -->
+        <div class="checklist-guarantee">
+            <h5><i class="fa-solid fa-certificate"></i> 100% Shop Verified & Quality Tested</h5>
+            <ul>
+                <li><i class="fa-solid fa-check"></i> 42-Point Hardware & Battery diagnostic passed</li>
+                <li><i class="fa-solid fa-check"></i> Original Power Adapter & Power Cable included</li>
+                <li><i class="fa-solid fa-check"></i> 6 Months Comprehensive Store Warranty</li>
+                <li><i class="fa-solid fa-check"></i> 100% Pickup guarantee at shop / Liluah Station</li>
+            </ul>
+        </div>
+
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;" id="modal-prod-desc">
+            Enterprise grade business laptop. Super clean condition, tested and verified.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="btn-full" id="modal-add-to-cart-btn" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-dark);">
+                <i class="fa-solid fa-cart-plus"></i> Add To Cart
+            </button>
+            <button class="btn-full" id="modal-buy-now-btn">
+                <i class="fa-solid fa-bolt"></i> Buy Now
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 3. Cart & Checkout Drawer -->
+<div class="modal-overlay" id="cart-modal">
+    <div class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h3><i class="fa-solid fa-cart-shopping"></i> Shopping Cart (<span id="cart-items-count">0</span>)</h3>
+            <button class="close-sheet-btn" onclick="closeModal('cart-modal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div id="cart-items-list" style="max-height: 240px; overflow-y: auto; margin-bottom: 12px;">
+            <!-- Cart items populated via JS -->
+        </div>
+
+        <div id="cart-empty-msg" style="display: none; text-align: center; padding: 30px 10px; color: var(--text-muted);">
+            <i class="fa-solid fa-cart-plus" style="font-size: 32px; margin-bottom: 8px;"></i>
+            <p>Aapka cart khali hai. Koi product add karein!</p>
+        </div>
+
+        <div id="cart-checkout-section">
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--border-dark); margin-bottom: 10px;">
+                <span style="font-weight: 700; color: var(--text-secondary);">Total Payable:</span>
+                <span style="font-size: 17px; font-weight: 800; color: var(--text-primary);" id="cart-total-amount">₹ 0</span>
+            </div>
+
+            <!-- Customer Details Form -->
+            <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+                <h4 style="font-size: 12px; font-weight: 700; margin-bottom: 8px;"><i class="fa-solid fa-location-dot"></i> Delivery / Pickup Options</h4>
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="cust-name-input" class="form-control" value="Rohit Kumar" placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number (For WhatsApp Updates)</label>
+                    <input type="tel" id="cust-phone-input" class="form-control" value="9876543210" placeholder="10-digit mobile">
+                </div>
+                <div class="form-group">
+                    <label>Pickup / Delivery Location</label>
+                    <select id="cust-pickup-location" class="form-control">
+                        <option value="Direct Shop Pickup">Direct Shop Pickup (Pay after testing)</option>
+                        <option value="Liluah Station Express Pickup">Liluah Station Express Pickup</option>
+                        <option value="Home Delivery (Cash on Delivery)">Home Delivery (COD)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pickup / Delivery Date</label>
+                    <input type="text" id="cust-pickup-date" class="form-control" value="Tomorrow (11:00 AM)">
+                </div>
+            </div>
+
+            <button class="btn-full" id="place-order-btn" style="background: var(--accent-green); height: 46px;">
+                <i class="fa-solid fa-circle-check"></i> Place Order (100% Guaranteed)
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 4. Order Confirmation Modal -->
+<div class="modal-overlay" id="order-success-modal">
+    <div class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="success-box">
+            <i class="fa-solid fa-circle-check"></i>
+            <h3>Order Confirmed!</h3>
+            <p style="font-size: 12px; color: var(--text-secondary);">Aapka order successfully save ho gaya hai.</p>
+            <div class="success-order-id" id="success-order-num">#LPS1045</div>
+            <div style="background: var(--card-dark); border-radius: var(--radius-md); padding: 12px; text-align: left; font-size: 12px; margin-bottom: 16px;">
+                <p><strong>Item:</strong> <span id="success-item-name">Dell Latitude 7490</span></p>
+                <p><strong>Pickup:</strong> <span id="success-pickup-loc">Direct Shop Pickup</span></p>
+                <p><strong>Guarantee:</strong> 100% Tested unit ready on time.</p>
+            </div>
+            <button class="btn-full" onclick="closeModal('order-success-modal')">
+                Theek Hai (Done)
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 5. Notifications Dialog -->
+<div class="modal-overlay" id="notifications-modal">
+    <div class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h3><i class="fa-regular fa-bell"></i> Store Announcements</h3>
+            <button class="close-sheet-btn" onclick="closeModal('notifications-modal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="notifications-list" style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px;">
+            <!-- Populated via JS -->
+        </div>
+    </div>
+</div>
+
+<!-- Toast Message Popup -->
+<div id="toast-box">
+    <i class="fa-solid fa-circle-info"></i>
+    <span id="toast-text">Message</span>
+</div>
+
+<!-- ================= JAVASCRIPT APP ENGINE ================= -->
+<script>
+    // Master PIN: Default 7890 or 9830 or 1234
+    const MASTER_PINS = ["7890", "9830", "1234"];
+
+    // Initial 11 Products (Same as Android App Database)
+    const DEFAULT_PRODUCTS = [
+        {
+            id: 1,
+            name: "Dell Latitude 7490",
+            brand: "Dell",
+            price: 21999,
+            mrp: 32999,
+            category: "Laptop",
+            condition: "Used",
+            imageUrl: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600",
+            processor: "Intel Core i5 8th Gen",
+            ram: "8GB DDR4",
+            storage: "256GB SSD",
+            display: '14" FHD Anti-Glare',
+            rating: 4.3,
+            reviews: 84,
+            inStock: true,
+            desc: "Enterprise grade business laptop in pristine condition. Super fast SSD boot, lightweight chassis, backlit keyboard, healthy battery."
+        },
+        {
+            id: 2,
+            name: "Dell XPS 13",
+            brand: "Dell",
+            price: 54999,
+            mrp: 75000,
+            category: "Laptop",
+            condition: "New",
+            imageUrl: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600",
+            processor: "Intel Core i7 10th Gen",
+            ram: "16GB LPDDR4x",
+            storage: "512GB NVMe SSD",
+            display: '13.3" InfinityEdge 4K UHD',
+            rating: 4.8,
+            reviews: 134,
+            inStock: true,
+            desc: "Flagship ultrabook with ultra-thin bezels, aluminum machined body, and stunning 4K display. Factory sealed."
+        },
+        {
+            id: 3,
+            name: "HP Pavilion 15",
+            brand: "HP",
+            price: 42999,
+            mrp: 58000,
+            category: "Laptop",
+            condition: "New",
+            imageUrl: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600",
+            processor: "AMD Ryzen 5 5600H",
+            ram: "16GB DDR4",
+            storage: "512GB PCIe SSD",
+            display: '15.6" IPS 144Hz FHD',
+            rating: 4.6,
+            reviews: 98,
+            inStock: true,
+            desc: "High performance gaming & creator laptop with Radeon graphics, micro-edge display, dual B&O speakers."
+        },
+        {
+            id: 4,
+            name: "Lenovo ThinkPad T480",
+            brand: "Lenovo",
+            price: 28999,
+            mrp: 42000,
+            category: "Laptop",
+            condition: "Used",
+            imageUrl: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600",
+            processor: "Intel Core i5 8th Gen",
+            ram: "16GB DDR4",
+            storage: "512GB SSD",
+            display: '14" IPS Matte FHD',
+            rating: 4.4,
+            reviews: 76,
+            inStock: true,
+            desc: "Legendary military-tested durability, spill-resistant keyboard, dual hot-swap battery technology."
+        },
+        {
+            id: 5,
+            name: "Apple MacBook Air M1",
+            brand: "Apple",
+            price: 68999,
+            mrp: 89900,
+            category: "Laptop",
+            condition: "Refurbished",
+            imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600",
+            processor: "Apple M1 8-Core CPU",
+            ram: "8GB Unified Memory",
+            storage: "256GB SSD",
+            display: '13.3" Retina True Tone',
+            rating: 4.7,
+            reviews: 112,
+            inStock: true,
+            desc: "Silent fanless architecture, 18 hour battery life, crystal clear Retina display, certified refurbished with warranty."
+        },
+        {
+            id: 6,
+            name: "HP ProBook 640 G5",
+            brand: "HP",
+            price: 22499,
+            mrp: 35000,
+            category: "Laptop",
+            condition: "Refurbished",
+            imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600",
+            processor: "Intel Core i5 8th Gen",
+            ram: "8GB DDR4",
+            storage: "256GB SSD",
+            display: '14" Anti-Glare FHD',
+            rating: 4.4,
+            reviews: 55,
+            inStock: true,
+            desc: "Reliable business laptop with sturdy metal hinge, USB Type-C, HDMI port, and crisp audio."
+        },
+        {
+            id: 7,
+            name: "Samsung 870 EVO SSD 250GB",
+            brand: "Samsung",
+            price: 3499,
+            mrp: 4500,
+            category: "SSD/HDD",
+            condition: "New",
+            imageUrl: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600",
+            processor: "SATA III 6Gb/s",
+            ram: "V-NAND TLC",
+            storage: "250GB Capacity",
+            display: "Sequential Read 560MB/s",
+            rating: 4.6,
+            reviews: 58,
+            inStock: true,
+            desc: "The world's favorite SSD. Unrivaled reliability, up to 560MB/s sequential read speeds."
+        },
+        {
+            id: 8,
+            name: "WD 1TB Hard Disk (HDD)",
+            brand: "Western Digital",
+            price: 3199,
+            mrp: 4200,
+            category: "SSD/HDD",
+            condition: "New",
+            imageUrl: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600",
+            processor: "5400 RPM",
+            ram: "128MB Cache",
+            storage: "1TB (1000GB)",
+            display: '2.5" Laptop Form Factor',
+            rating: 4.4,
+            reviews: 72,
+            inStock: true,
+            desc: "High capacity internal 2.5\" mobile storage for photos, movies, and large files. WD Blue series."
+        },
+        {
+            id: 9,
+            name: "Type-C to HDMI Dongle Hub",
+            brand: "Generic",
+            price: 1299,
+            mrp: 1999,
+            category: "Dongles",
+            condition: "New",
+            imageUrl: "https://images.unsplash.com/photo-1622445262464-84b1456045b6?w=600",
+            processor: "4K @ 60Hz Video",
+            ram: "USB 3.0 Port",
+            storage: "PD 100W Pass-through",
+            display: "Aluminum Grey Alloy",
+            rating: 4.3,
+            reviews: 56,
+            inStock: true,
+            desc: "Connect your laptop to any external 4K monitor, TV, or projector with PD charging."
+        },
+        {
+            id: 10,
+            name: "Laptop Cooling Pad Stand",
+            brand: "TechGear",
+            price: 899,
+            mrp: 1499,
+            category: "Accessories",
+            condition: "New",
+            imageUrl: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600",
+            processor: "Dual High-Speed Fans",
+            ram: "Blue LED Glow",
+            storage: "5 Angle Ergonomic",
+            display: 'Fits up to 17" Laptops',
+            rating: 4.2,
+            reviews: 48,
+            inStock: true,
+            desc: "Prevents laptop thermal throttling during heavy multitasking. Ultra quiet fans."
+        },
+        {
+            id: 11,
+            name: "Dell Wireless Mouse",
+            brand: "Dell",
+            price: 749,
+            mrp: 1199,
+            category: "Accessories",
+            condition: "New",
+            imageUrl: "https://images.unsplash.com/photo-1527814050087-3793815479db?w=600",
+            processor: "1600 DPI Optical",
+            ram: "2.4GHz Wireless",
+            storage: "Plug & Play Nano Receiver",
+            display: "Matte Black",
+            rating: 4.5,
+            reviews: 63,
+            inStock: true,
+            desc: "Ergonomic wireless mouse with 18-month battery life and smooth optical tracking."
+        }
+    ];
+
+    // Initial 10 Banner Slots (6 Custom + 4 Auto Ads with 300x250)
+    const DEFAULT_BANNERS = [
+        {
+            slot: 1,
+            type: "CUSTOM",
+            title: "Best Laptops, Best Prices",
+            subtitle: "New & Used Laptops With Trusted Quality Guarantee",
+            badge: "100% QUALITY TESTED",
+            cta: "Explore Now",
+            category: "Laptop",
+            gradient: "linear-gradient(135deg, #1e3a8a 0%, #312e81 100%)",
+            active: true
+        },
+        {
+            slot: 2,
+            type: "CUSTOM",
+            title: "⚡ Supercharge Speed: SSD & RAM Upgrades",
+            subtitle: "Samsung EVO & WD NVMe at lowest wholesale price with free installation",
+            badge: "BEST UPGRADE DEALS",
+            cta: "View Upgrades",
+            category: "SSD/HDD",
+            gradient: "linear-gradient(135deg, #064e3b 0%, #0f766e 100%)",
+            active: true
+        },
+        {
+            slot: 3,
+            type: "CUSTOM",
+            title: "Certified ThinkPads & MacBooks",
+            subtitle: "Enterprise durability tested with 6 Months Comprehensive Store Warranty",
+            badge: "LIMITED TIME OFFER",
+            cta: "Grab Deal",
+            category: "Laptop",
+            gradient: "linear-gradient(135deg, #701a75 0%, #4c0519 100%)",
+            active: true
+        },
+        {
+            slot: 4,
+            type: "CUSTOM",
+            title: "Gaming & Creator Series Laptops",
+            subtitle: "Dedicated RTX Graphics & High Refresh Rate Displays Ready",
+            badge: "HIGH PERFORMANCE",
+            cta: "Explore Deals",
+            category: "Laptop",
+            gradient: "linear-gradient(135deg, #92400e 0%, #451a03 100%)",
+            active: true
+        },
+        {
+            slot: 5,
+            type: "CUSTOM",
+            title: "Essential Laptop Dongles & Hubs",
+            subtitle: "Type-C Multiport Adapters, 4K HDMI & Fast Charging Hubs",
+            badge: "HOT ACCESSORIES",
+            cta: "Shop Hubs",
+            category: "Dongles",
+            gradient: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+            active: true
+        },
+        {
+            slot: 6,
+            type: "CUSTOM",
+            title: "Liluah Station Express Pickup",
+            subtitle: "Test any laptop in person before paying. Zero risk guarantee!",
+            badge: "100% STORE PICKUP",
+            cta: "Check Location",
+            category: "All",
+            gradient: "linear-gradient(135deg, #1e3a8a 0%, #172554 100%)",
+            active: true
+        },
+        // Slots 7 to 10: Auto Ad Units (300x250)
+        {
+            slot: 7,
+            type: "AUTO_AD",
+            title: "Google AdSense • Tech Network",
+            subtitle: "300x250 Medium Rectangle Certified Partner Advertisement",
+            badge: "SPONSORED AD",
+            cta: "Visit Sponsor",
+            adUnitId: "ca-app-pub-3940256099942544/6300978111",
+            active: true
+        },
+        {
+            slot: 8,
+            type: "AUTO_AD",
+            title: "AdMob Media • Brand Placement",
+            subtitle: "Interactive 300x250 High eCPM Auto Rotating Placement",
+            badge: "AUTO AD UNIT #2",
+            cta: "Learn More",
+            adUnitId: "ca-app-pub-3940256099942544/1033173712",
+            active: true
+        },
+        {
+            slot: 9,
+            type: "AUTO_AD",
+            title: "AI Smart Ad Network • Electronics",
+            subtitle: "Contextual Targeted Tech Campaigns for Indian Shoppers",
+            badge: "AUTO AD UNIT #3",
+            cta: "Open Partner",
+            adUnitId: "ca-app-pub-3940256099942544/8691691433",
+            active: true
+        },
+        {
+            slot: 10,
+            type: "AUTO_AD",
+            title: "Premium Sponsor • Cloud & Software",
+            subtitle: "Official 300x250 Premium Auto Placement Slot",
+            badge: "AUTO AD UNIT #4",
+            cta: "Explore",
+            adUnitId: "ca-app-pub-3940256099942544/5224354917",
+            active: true
+        }
+    ];
+
+    // Initial Orders
+    const DEFAULT_ORDERS = [
+        {
+            id: "#LPS1001",
+            productName: "Dell Latitude 7490",
+            price: 21999,
+            customer: "Rahul Sharma",
+            phone: "9876543210",
+            pickup: "Liluah Station Pickup",
+            date: "Tomorrow (11:00 AM)",
+            status: "Processing"
+        },
+        {
+            id: "#LPS1000",
+            productName: "HP ProBook 640 G5",
+            price: 22499,
+            customer: "Amit Kumar Verma",
+            phone: "9830123456",
+            pickup: "Direct Shop Pickup",
+            date: "Today (05:00 PM)",
+            status: "Delivered"
+        },
+        {
+            id: "#LPS0999",
+            productName: "Lenovo ThinkPad T480",
+            price: 28999,
+            customer: "Sneha Mondal",
+            phone: "7003456789",
+            pickup: "Direct Shop Pickup",
+            date: "Day After Tomorrow",
+            status: "Pending"
+        },
+        {
+            id: "#LPS0998",
+            productName: "Dell Latitude 7490",
+            price: 21999,
+            customer: "Vikram Singh",
+            phone: "8123456780",
+            pickup: "Liluah Station Pickup",
+            date: "24 Oct 2026",
+            status: "Delivered"
+        }
+    ];
+
+    // Initial Notifications
+    const DEFAULT_NOTIFICATIONS = [
+        {
+            id: 1,
+            title: "🎉 New Laptop Stock Arrived!",
+            message: "Dell Latitude 7490 and Lenovo ThinkPad T480 now in stock with guaranteed testing & 6 months warranty.",
+            time: "1 hour ago"
+        },
+        {
+            id: 2,
+            title: "🛡️ 100% Pickup Guarantee",
+            message: "Book any laptop with Cash on Delivery — your unit will be packed, tested, and waiting for you at the shop or Liluah Station on your chosen date!",
+            time: "2 hours ago"
+        }
+    ];
+
+    // App State Management using LocalStorage
+    let products = JSON.parse(localStorage.getItem("lps_products")) || DEFAULT_PRODUCTS;
+    let banners = JSON.parse(localStorage.getItem("lps_banners")) || DEFAULT_BANNERS;
+    let orders = JSON.parse(localStorage.getItem("lps_orders")) || DEFAULT_ORDERS;
+    let notifications = JSON.parse(localStorage.getItem("lps_notifications")) || DEFAULT_NOTIFICATIONS;
+    let bannerIntervalSec = parseInt(localStorage.getItem("lps_banner_interval")) || 5;
+    let currentTheme = localStorage.getItem("lps_theme") || "BLUE";
+    let storeTitle = localStorage.getItem("lps_title") || "Laptops";
+    let storeTagline = localStorage.getItem("lps_tagline") || "Your Trusted Laptop Store";
+    let cart = JSON.parse(localStorage.getItem("lps_cart")) || [];
+
+    let currentCategory = "All";
+    let currentCondition = "All";
+    let searchQuery = "";
+    let carouselIndex = 0;
+    let carouselTimer = null;
+    let brandClickCount = 0;
+    let brandClickTimer = null;
+    let activeDetailProduct = null;
+
+    // Save helpers
+    function saveProducts() { localStorage.setItem("lps_products", JSON.stringify(products)); }
+    function saveBanners() { localStorage.setItem("lps_banners", JSON.stringify(banners)); }
+    function saveOrders() { localStorage.setItem("lps_orders", JSON.stringify(orders)); }
+    function saveNotifications() { localStorage.setItem("lps_notifications", JSON.stringify(notifications)); }
+    function saveCart() { localStorage.setItem("lps_cart", JSON.stringify(cart)); updateCartBadge(); }
+
+    // Init function
+    window.addEventListener("DOMContentLoaded", () => {
+        applyTheme(currentTheme, false);
+        document.getElementById("store-title-display").innerText = storeTitle;
+        document.getElementById("store-tagline-display").innerText = storeTagline;
+        document.getElementById("config-store-title").value = storeTitle;
+        document.getElementById("config-store-tagline").value = storeTagline;
+        document.getElementById("admin-banner-interval-select").value = bannerIntervalSec;
+        document.getElementById("timer-sec-val").innerText = bannerIntervalSec + "s";
+        document.getElementById("dash-banner-interval-text").innerText = bannerIntervalSec + " Seconds";
+
+        initCarousel();
+        renderProducts();
+        renderNotifications();
+        renderUserOrders();
+        updateCartBadge();
+        setupEventListeners();
+    });
+
+    // Theme Switcher
+    function applyTheme(themeName, notify = true) {
+        currentTheme = themeName;
+        document.body.setAttribute("data-theme", themeName);
+        localStorage.setItem("lps_theme", themeName);
+        if (notify) showToast(`🎨 Theme changed to ${themeName}`);
+    }
+
+    // Carousel Engine (Smooth, No Freezing/Halving)
+    function initCarousel() {
+        const track = document.getElementById("carousel-track");
+        const indicators = document.getElementById("carousel-indicators");
+        track.innerHTML = "";
+        indicators.innerHTML = "";
+
+        const activeBanners = banners.filter(b => b.active);
+        if (activeBanners.length === 0) return;
+
+        activeBanners.forEach((b, idx) => {
+            const slide = document.createElement("div");
+            slide.className = `carousel-slide ${b.type === 'AUTO_AD' ? 'ad-slot-slide' : ''}`;
+            if (b.type === "CUSTOM") {
+                slide.style.background = b.gradient || "linear-gradient(135deg, #1e3a8a 0%, #312e81 100%)";
+                slide.innerHTML = `
+                    <div class="banner-badge"><i class="fa-solid fa-certificate"></i> ${b.badge}</div>
+                    <div>
+                        <div class="banner-title">${b.title}</div>
+                        <div class="banner-subtitle">${b.subtitle}</div>
+                    </div>
+                    <button class="banner-cta" onclick="handleBannerCta('${b.category}')">
+                        ${b.cta} <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                `;
+            } else {
+                // Auto Ad 300x250 Unit
+                slide.innerHTML = `
+                    <div class="ad-unit-tag"><i class="fa-solid fa-rectangle-ad"></i> ${b.badge} • 300x250 Medium Rectangle</div>
+                    <div class="ad-300x250-box">
+                        <i class="fa-solid fa-ad"></i>
+                        <span style="font-size: 13px; font-weight: 800;">${b.title}</span>
+                        <span style="font-size: 11px; color: #cbd5e1;">${b.subtitle}</span>
+                        <span class="ad-unit-id-code">Unit ID: ${b.adUnitId || 'ca-app-pub-3940256099942544/6300978111'}</span>
+                    </div>
+                `;
+            }
+            track.appendChild(slide);
+
+            // Dot
+            const dot = document.createElement("div");
+            dot.className = `indicator-dot ${idx === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(idx);
+            indicators.appendChild(dot);
+        });
+
+        startCarouselTimer();
+        setupTouchSwipe();
+    }
+
+    function goToSlide(idx) {
+        const activeBanners = banners.filter(b => b.active);
+        if (activeBanners.length === 0) return;
+        carouselIndex = (idx + activeBanners.length) % activeBanners.length;
+        const track = document.getElementById("carousel-track");
+        track.style.transform = `translateX(-${carouselIndex * 100}%)`;
+
+        const dots = document.querySelectorAll(".indicator-dot");
+        dots.forEach((d, i) => {
+            d.classList.toggle("active", i === carouselIndex);
+        });
+    }
+
+    function startCarouselTimer() {
+        if (carouselTimer) clearInterval(carouselTimer);
+        carouselTimer = setInterval(() => {
+            goToSlide(carouselIndex + 1);
+        }, bannerIntervalSec * 1000);
+    }
+
+    function handleBannerCta(category) {
+        if (!category || category === "All") {
+            setCategoryFilter("All");
+        } else {
+            setCategoryFilter(category);
+        }
+        window.scrollTo({ top: 400, behavior: "smooth" });
+    }
+
+    // Touch Swipe Support on Mobile
+    function setupTouchSwipe() {
+        const box = document.getElementById("carousel-box");
+        let startX = 0;
+        let diffX = 0;
+
+        box.addEventListener("touchstart", (e) => {
+            startX = e.touches[0].clientX;
+            clearInterval(carouselTimer);
+        }, { passive: true });
+
+        box.addEventListener("touchmove", (e) => {
+            diffX = e.touches[0].clientX - startX;
+        }, { passive: true });
+
+        box.addEventListener("touchend", () => {
+            if (diffX > 40) {
+                goToSlide(carouselIndex - 1);
+            } else if (diffX < -40) {
+                goToSlide(carouselIndex + 1);
+            }
+            startCarouselTimer();
+            diffX = 0;
+        });
+    }
+
+    // Render Products Grid
+    function renderProducts() {
+        const grid = document.getElementById("products-grid");
+        grid.innerHTML = "";
+
+        const filtered = products.filter(p => {
+            const matchesCat = currentCategory === "All" ||
+                (currentCategory === "Laptops" && p.category === "Laptop") ||
+                (currentCategory === "Accessories" && (p.category === "Accessories" || p.category === "SSD/HDD" || p.category === "Dongles")) ||
+                p.category === currentCategory;
+
+            const matchesCond = currentCondition === "All" || p.condition.toLowerCase() === currentCondition.toLowerCase();
+
+            const query = searchQuery.trim().toLowerCase();
+            const matchesSearch = !query ||
+                p.name.toLowerCase().includes(query) ||
+                p.processor.toLowerCase().includes(query) ||
+                p.category.toLowerCase().includes(query) ||
+                p.desc.toLowerCase().includes(query);
+
+            return matchesCat && matchesCond && matchesSearch;
+        });
+
+        document.getElementById("products-count-num").innerText = filtered.length;
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state-box">
+                    <i class="fa-solid fa-box-open"></i>
+                    <h4 style="font-size: 14px; margin-bottom: 4px;">Koi Product Nahi Mila</h4>
+                    <p style="font-size: 11.5px; color: var(--text-secondary);">Kripya dusra search keyword ya category filter lagayein.</p>
+                </div>
+            `;
+            return;
+        }
+
+        filtered.forEach(p => {
+            const card = document.createElement("div");
+            card.className = "product-card";
+            card.innerHTML = `
+                <div class="product-card-top" onclick="openProductDetail(${p.id})">
+                    <img class="product-img" src="${p.imageUrl}" alt="${p.name}" loading="lazy">
+                    <span class="badge-condition-pill ${p.condition.toLowerCase()}">${p.condition}</span>
+                    <span class="badge-stock-pill ${p.inStock ? '' : 'out'}">${p.inStock ? 'In Stock' : 'Out of Stock'}</span>
+                </div>
+                <div class="product-body">
+                    <div>
+                        <div class="product-title" onclick="openProductDetail(${p.id})" style="cursor: pointer;">${p.name}</div>
+                        <div class="product-specs-chip">${p.processor} • ${p.ram} • ${p.storage}</div>
+                        <div class="product-rating">
+                            <i class="fa-solid fa-star"></i> ${p.rating}
+                            <span>(${p.reviews})</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="product-price-row">
+                            <span class="current-price">₹ ${p.price.toLocaleString('en-IN')}</span>
+                            ${p.mrp ? `<span class="original-price">₹ ${p.mrp.toLocaleString('en-IN')}</span>` : ''}
+                        </div>
+                        <div class="product-btn-row">
+                            <button class="btn-card-action btn-details" onclick="openProductDetail(${p.id})">
+                                Details
+                            </button>
+                            <button class="btn-card-action btn-buy-now" onclick="quickBuyNow(${p.id})">
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Filter Handlers
+    function setCategoryFilter(cat) {
+        currentCategory = cat;
+        document.querySelectorAll("#category-chips-row .chip-pill").forEach(c => {
+            c.classList.toggle("active", c.getAttribute("data-cat") === cat);
+        });
+        renderProducts();
+    }
+
+    // Product Detail Modal
+    function openProductDetail(id) {
+        const prod = products.find(p => p.id === id);
+        if (!prod) return;
+        activeDetailProduct = prod;
+
+        document.getElementById("modal-prod-title").innerText = prod.name;
+        document.getElementById("modal-prod-img").src = prod.imageUrl;
+        document.getElementById("modal-prod-price").innerText = `₹ ${prod.price.toLocaleString('en-IN')}`;
+        document.getElementById("modal-prod-mrp").innerText = prod.mrp ? `₹ ${prod.mrp.toLocaleString('en-IN')}` : '';
+        document.getElementById("modal-prod-cond-badge").innerText = prod.condition.toUpperCase();
+        document.getElementById("modal-prod-cond-badge").className = `badge-condition-pill ${prod.condition.toLowerCase()}`;
+        document.getElementById("modal-prod-cpu").innerText = prod.processor || 'Tested Architecture';
+        document.getElementById("modal-prod-ram").innerText = prod.ram || 'Verified Speed';
+        document.getElementById("modal-prod-storage").innerText = prod.storage || 'High-Speed SSD';
+        document.getElementById("modal-prod-display").innerText = prod.display || 'FHD Screen';
+        document.getElementById("modal-prod-desc").innerText = prod.desc || '';
+        document.getElementById("modal-prod-stock").innerText = prod.inStock ? "In Stock & Verified" : "Currently Out of Stock";
+        document.getElementById("modal-prod-stock").style.color = prod.inStock ? "var(--accent-green)" : "var(--accent-red)";
+
+        openModal("product-detail-modal");
+    }
+
+    // Cart Management
+    function addToCart(product, openCartDrawer = false) {
+        const existing = cart.find(c => c.id === product.id);
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({ ...product, qty: 1 });
+        }
+        saveCart();
+        showToast(`🛒 ${product.name} cart me add ho gaya!`);
+        if (openCartDrawer) openCart();
+    }
+
+    function quickBuyNow(id) {
+        const prod = products.find(p => p.id === id);
+        if (prod) {
+            addToCart(prod, true);
+        }
+    }
+
+    function updateCartBadge() {
+        const badge = document.getElementById("cart-badge-count");
+        const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+        if (totalItems > 0) {
+            badge.style.display = "flex";
+            badge.innerText = totalItems;
+        } else {
+            badge.style.display = "none";
+        }
+    }
+
+    function openCart() {
+        const list = document.getElementById("cart-items-list");
+        const emptyMsg = document.getElementById("cart-empty-msg");
+        const checkoutSection = document.getElementById("cart-checkout-section");
+        list.innerHTML = "";
+
+        const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+        document.getElementById("cart-items-count").innerText = totalItems;
+
+        if (cart.length === 0) {
+            emptyMsg.style.display = "block";
+            checkoutSection.style.display = "none";
+        } else {
+            emptyMsg.style.display = "none";
+            checkoutSection.style.display = "block";
+
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                const row = document.createElement("div");
+                row.className = "cart-item-row";
+                row.innerHTML = `
+                    <img class="cart-item-img" src="${item.imageUrl}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>₹ ${item.price.toLocaleString('en-IN')} × ${item.qty}</p>
+                    </div>
+                    <div class="cart-qty-ctrl">
+                        <button onclick="changeCartQty(${item.id}, -1)">-</button>
+                        <span style="font-size: 12px; font-weight: 700;">${item.qty}</span>
+                        <button onclick="changeCartQty(${item.id}, 1)">+</button>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+            document.getElementById("cart-total-amount").innerText = `₹ ${total.toLocaleString('en-IN')}`;
+        }
+
+        openModal("cart-modal");
+    }
+
+    function changeCartQty(id, delta) {
+        const idx = cart.findIndex(c => c.id === id);
+        if (idx !== -1) {
+            cart[idx].qty += delta;
+            if (cart[idx].qty <= 0) cart.splice(idx, 1);
+            saveCart();
+            openCart(); // Re-render cart drawer
+        }
+    }
+
+    // Place Order Flow
+    function placeOrder() {
+        if (cart.length === 0) return;
+        const name = document.getElementById("cust-name-input").value.trim() || "Rohit Kumar";
+        const phone = document.getElementById("cust-phone-input").value.trim() || "9876543210";
+        const loc = document.getElementById("cust-pickup-location").value;
+        const date = document.getElementById("cust-pickup-date").value.trim() || "Tomorrow (11:00 AM)";
+
+        const orderNum = `#LPS${Math.floor(1000 + Math.random() * 9000)}`;
+        const firstItem = cart[0];
+
+        const newOrder = {
+            id: orderNum,
+            productName: cart.length > 1 ? `${firstItem.name} + ${cart.length - 1} more items` : firstItem.name,
+            price: cart.reduce((acc, c) => acc + (c.price * c.qty), 0),
+            customer: name,
+            phone: phone,
+            pickup: loc,
+            date: date,
+            status: "Processing"
+        };
+
+        orders.unshift(newOrder);
+        saveOrders();
+
+        // Clear cart
+        cart = [];
+        saveCart();
+        closeModal("cart-modal");
+
+        // Show confirmation modal
+        document.getElementById("success-order-num").innerText = orderNum;
+        document.getElementById("success-item-name").innerText = newOrder.productName;
+        document.getElementById("success-pickup-loc").innerText = loc;
+        openModal("order-success-modal");
+
+        renderUserOrders();
+        updateAdminStats();
+    }
+
+    // Notifications Dialog
+    function renderNotifications() {
+        const list = document.getElementById("notifications-list");
+        list.innerHTML = "";
+        notifications.forEach(n => {
+            const card = document.createElement("div");
+            card.style.background = "var(--card-dark)";
+            card.style.border = "1px solid var(--border-dark)";
+            card.style.borderRadius = "var(--radius-md)";
+            card.style.padding = "12px";
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <h4 style="font-size: 13px; font-weight: 700; color: #38bdf8;">${n.title}</h4>
+                    <span style="font-size: 10px; color: var(--text-muted);">${n.time}</span>
+                </div>
+                <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.4;">${n.message}</p>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    // User Profile Orders Render
+    function renderUserOrders() {
+        const list = document.getElementById("user-orders-list");
+        if (!list) return;
+        list.innerHTML = "";
+        orders.slice(0, 5).forEach(o => {
+            const item = document.createElement("div");
+            item.style.background = "var(--card-dark)";
+            item.style.border = "1px solid var(--border-dark)";
+            item.style.borderRadius = "var(--radius-md)";
+            item.style.padding = "12px";
+            item.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span style="font-family: monospace; font-size: 12px; font-weight: 700; color: var(--tech-blue-bright);">${o.id}</span>
+                    <span style="font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: ${o.status === 'Delivered' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)'}; color: ${o.status === 'Delivered' ? '#10b981' : '#f59e0b'};">${o.status}</span>
+                </div>
+                <h4 style="font-size: 13px; font-weight: 700;">${o.productName}</h4>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
+                    Pickup: ${o.pickup} • ${o.date}
+                </div>
+                <div style="font-size: 13px; font-weight: 800; color: var(--text-primary); margin-top: 6px;">
+                    ₹ ${o.price.toLocaleString('en-IN')}
+                </div>
+            `;
+            list.appendChild(item);
+        });
+    }
+
+    // ================= ADMIN FUNCTIONS =================
+    function checkAdminPin(pin) {
+        const clean = pin.trim();
+        if (MASTER_PINS.includes(clean)) {
+            closeModal("pin-modal");
+            document.getElementById("admin-pin-input").value = "";
+            openAdminPanel();
+            showToast("🔒 Master PIN verified! Admin Panel Unlocked.");
+            return true;
+        } else {
+            showToast("❌ Galat Master PIN! Try 7890");
+            return false;
+        }
+    }
+
+    function openAdminPanel() {
+        document.getElementById("user-storefront").style.display = "none";
+        document.getElementById("admin-panel-container").style.display = "block";
+        document.querySelector(".bottom-nav").style.display = "none";
+        updateAdminStats();
+        renderAdminBannerSlots();
+        renderAdminProducts();
+        renderAdminOrders();
+    }
+
+    function exitAdminPanel() {
+        document.getElementById("admin-panel-container").style.display = "none";
+        document.getElementById("user-storefront").style.display = "block";
+        document.querySelector(".bottom-nav").style.display = "flex";
+        showToast("Returned to Customer Storefront");
+    }
+
+    function switchAdminTab(tabName) {
+        document.querySelectorAll(".admin-tab-btn").forEach(b => {
+            b.classList.toggle("active", b.getAttribute("data-atab") === tabName);
+        });
+        const allViews = [
+            "dashboard", "banners", "add-product", "products", "orders", "theme", "broadcast"
+        ];
+        allViews.forEach(v => {
+            const el = document.getElementById(`atab-${v}-view`);
+            if (el) el.style.display = (v === tabName) ? "block" : "none";
+        });
+    }
+
+    function updateAdminStats() {
+        document.getElementById("stat-total-products").innerText = products.length;
+        document.getElementById("stat-total-orders").innerText = orders.length;
+        const rev = orders.reduce((acc, o) => acc + (o.price || 0), 0);
+        document.getElementById("stat-total-revenue").innerText = `₹ ${rev.toLocaleString('en-IN')}`;
+    }
+
+    // Render 10 Banner Slots in Admin
+    function renderAdminBannerSlots() {
+        const container = document.getElementById("admin-banner-slots-list");
+        container.innerHTML = "";
+
+        banners.forEach(b => {
+            const card = document.createElement("div");
+            card.className = "slot-manage-card";
+            card.innerHTML = `
+                <div class="slot-header">
+                    <span class="slot-num-badge ${b.type === 'AUTO_AD' ? 'ad' : ''}">
+                        SLOT #${b.slot} ${b.type === 'AUTO_AD' ? '(300x250 Auto Ad)' : '(Custom Promo)'}
+                    </span>
+                    <label style="font-size: 11px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" ${b.active ? 'checked' : ''} onchange="toggleBannerSlotActive(${b.slot}, this.checked)">
+                        Active
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control" value="${b.title}" onchange="updateBannerField(${b.slot}, 'title', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Subtitle / Description</label>
+                    <input type="text" class="form-control" value="${b.subtitle}" onchange="updateBannerField(${b.slot}, 'subtitle', this.value)">
+                </div>
+                ${b.type === 'AUTO_AD' ? `
+                    <div class="form-group">
+                        <label>Ad Unit ID (300x250 Medium Rectangle)</label>
+                        <input type="text" class="form-control" value="${b.adUnitId || ''}" placeholder="ca-app-pub-3940256099942544/6300978111" onchange="updateBannerField(${b.slot}, 'adUnitId', this.value)">
+                    </div>
+                ` : `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label>Badge Text</label>
+                            <input type="text" class="form-control" value="${b.badge}" onchange="updateBannerField(${b.slot}, 'badge', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label>CTA Button</label>
+                            <input type="text" class="form-control" value="${b.cta}" onchange="updateBannerField(${b.slot}, 'cta', this.value)">
+                        </div>
+                    </div>
+                `}
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function toggleBannerSlotActive(slot, active) {
+        const b = banners.find(item => item.slot === slot);
+        if (b) {
+            b.active = active;
+            saveBanners();
+            initCarousel();
+            showToast(`Slot #${slot} status updated`);
+        }
+    }
+
+    function updateBannerField(slot, field, value) {
+        const b = banners.find(item => item.slot === slot);
+        if (b) {
+            b[field] = value;
+            saveBanners();
+            initCarousel();
+            showToast(`Slot #${slot} updated`);
+        }
+    }
+
+    // Admin Products Management
+    function renderAdminProducts(filterQuery = "") {
+        const list = document.getElementById("admin-products-list");
+        list.innerHTML = "";
+
+        const filtered = products.filter(p => !filterQuery || p.name.toLowerCase().includes(filterQuery.toLowerCase()));
+
+        filtered.forEach(p => {
+            const item = document.createElement("div");
+            item.style.background = "var(--card-dark)";
+            item.style.border = "1px solid var(--border-dark)";
+            item.style.borderRadius = "var(--radius-md)";
+            item.style.padding = "10px 12px";
+            item.style.display = "flex";
+            item.style.alignItems = "center";
+            item.style.justifyContent = "space-between";
+            item.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="${p.imageUrl}" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover;">
+                    <div>
+                        <h4 style="font-size: 13px; font-weight: 700;">${p.name}</h4>
+                        <p style="font-size: 11px; color: var(--text-secondary);">₹ ${p.price.toLocaleString('en-IN')} • ${p.category} (${p.condition})</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label style="font-size: 10px; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                        <input type="checkbox" ${p.inStock ? 'checked' : ''} onchange="toggleProductStock(${p.id}, this.checked)">
+                        In Stock
+                    </label>
+                    <button style="background: none; border: none; color: var(--accent-red); cursor: pointer; padding: 4px;" onclick="deleteProduct(${p.id})">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            list.appendChild(item);
+        });
+    }
+
+    function toggleProductStock(id, inStock) {
+        const p = products.find(x => x.id === id);
+        if (p) {
+            p.inStock = inStock;
+            saveProducts();
+            renderProducts();
+            showToast(`Stock updated for ${p.name}`);
+        }
+    }
+
+    function deleteProduct(id) {
+        if (confirm("Kya aap sach me is product ko delete karna chahte hain?")) {
+            products = products.filter(p => p.id !== id);
+            saveProducts();
+            renderProducts();
+            renderAdminProducts();
+            updateAdminStats();
+            showToast("Product deleted successfully");
+        }
+    }
+
+    // Admin Orders Management
+    function renderAdminOrders(statusFilter = "All") {
+        const list = document.getElementById("admin-orders-list");
+        list.innerHTML = "";
+
+        const filtered = orders.filter(o => statusFilter === "All" || o.status.toLowerCase() === statusFilter.toLowerCase());
+
+        if (filtered.length === 0) {
+            list.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 20px;">No orders found in '${statusFilter}'.</p>`;
+            return;
+        }
+
+        filtered.forEach(o => {
+            const card = document.createElement("div");
+            card.style.background = "var(--card-dark)";
+            card.style.border = "1px solid var(--border-dark)";
+            card.style.borderRadius = "var(--radius-md)";
+            card.style.padding = "12px";
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-family: monospace; font-size: 13px; font-weight: 800; color: var(--tech-blue-bright);">${o.id}</span>
+                    <select onchange="updateOrderStatus('${o.id}', this.value)" class="form-control" style="width: auto; height: 28px; padding: 0 8px; font-size: 11px;">
+                        <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                        <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+                        <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                    </select>
+                </div>
+                <h4 style="font-size: 13.5px; font-weight: 700;">${o.productName}</h4>
+                <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">
+                    Customer: <strong>${o.customer}</strong> (${o.phone})<br>
+                    Pickup: ${o.pickup} (${o.date})
+                </div>
+                <div style="font-size: 14px; font-weight: 800; color: var(--text-primary); margin-top: 6px;">
+                    Total: ₹ ${o.price.toLocaleString('en-IN')}
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+        const o = orders.find(x => x.id === orderId);
+        if (o) {
+            o.status = newStatus;
+            saveOrders();
+            renderUserOrders();
+            showToast(`Order ${orderId} marked as ${newStatus}`);
+        }
+    }
+
+    function filterAdminOrders(status, btn) {
+        document.querySelectorAll("#atab-orders-view .condition-pill").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        renderAdminOrders(status);
+    }
+
+    function saveStoreBranding() {
+        const title = document.getElementById("config-store-title").value.trim() || "Laptops";
+        const tagline = document.getElementById("config-store-tagline").value.trim() || "Your Trusted Laptop Store";
+        storeTitle = title;
+        storeTagline = tagline;
+        localStorage.setItem("lps_title", title);
+        localStorage.setItem("lps_tagline", tagline);
+        document.getElementById("store-title-display").innerText = title;
+        document.getElementById("store-tagline-display").innerText = tagline;
+        showToast("✅ Store Branding saved!");
+    }
+
+    function sendBroadcastNotification() {
+        const title = document.getElementById("broadcast-title").value.trim();
+        const msg = document.getElementById("broadcast-message").value.trim();
+        if (!title || !msg) {
+            showToast("Kripya title aur message dono likhein!");
+            return;
+        }
+        notifications.unshift({
+            id: Date.now(),
+            title: title,
+            message: msg,
+            time: "Just now"
+        });
+        saveNotifications();
+        renderNotifications();
+        document.getElementById("broadcast-title").value = "";
+        document.getElementById("broadcast-message").value = "";
+        showToast("📢 Notification sent to store visitors!");
+    }
+
+    // Modal UI Handlers
+    function openModal(id) {
+        document.getElementById(id).classList.add("active");
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove("active");
+    }
+
+    // Toast Engine
+    function showToast(msg) {
+        const toast = document.getElementById("toast-box");
+        document.getElementById("toast-text").innerText = msg;
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2800);
+    }
+
+    // Event Listeners Binding
+    function setupEventListeners() {
+        // Secret Admin Unlock via Brand Triple Tap
+        document.getElementById("brand-header-click").addEventListener("click", () => {
+            brandClickCount++;
+            clearTimeout(brandClickTimer);
+            if (brandClickCount >= 3) {
+                brandClickCount = 0;
+                openModal("pin-modal");
+            } else {
+                brandClickTimer = setTimeout(() => { brandClickCount = 0; }, 600);
+            }
+        });
+
+        // Secret Admin Lock icon button
+        document.getElementById("secret-lock-btn").addEventListener("click", () => {
+            openModal("pin-modal");
+        });
+
+        // Profile secret button
+        document.getElementById("profile-admin-unlock-btn").addEventListener("click", () => {
+            openModal("pin-modal");
+        });
+
+        // Exit Admin
+        document.getElementById("exit-admin-btn").addEventListener("click", exitAdminPanel);
+
+        // Submit PIN
+        document.getElementById("submit-pin-btn").addEventListener("click", () => {
+            const pin = document.getElementById("admin-pin-input").value;
+            checkAdminPin(pin);
+        });
+
+        document.getElementById("admin-pin-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                checkAdminPin(e.target.value);
+            }
+        });
+
+        // Notifications Modal Button
+        document.getElementById("notifications-btn").addEventListener("click", () => {
+            openModal("notifications-modal");
+        });
+
+        // Search Input Handling
+        const searchInput = document.getElementById("store-search-input");
+        const clearBtn = document.getElementById("search-clear-btn");
+        searchInput.addEventListener("input", (e) => {
+            searchQuery = e.target.value;
+            clearBtn.style.display = searchQuery ? "block" : "none";
+            renderProducts();
+        });
+        clearBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            searchQuery = "";
+            clearBtn.style.display = "none";
+            renderProducts();
+        });
+
+        // Category Chips Click
+        document.querySelectorAll("#category-chips-row .chip-pill").forEach(chip => {
+            chip.addEventListener("click", () => {
+                setCategoryFilter(chip.getAttribute("data-cat"));
+            });
+        });
+
+        // Condition Filter Pills Click
+        document.querySelectorAll(".condition-filter-row .condition-pill").forEach(pill => {
+            pill.addEventListener("click", () => {
+                document.querySelectorAll(".condition-filter-row .condition-pill").forEach(p => p.classList.remove("active"));
+                pill.classList.add("active");
+                currentCondition = pill.getAttribute("data-cond");
+                renderProducts();
+            });
+        });
+
+        // Bottom Navigation switching
+        document.querySelectorAll(".bottom-nav .nav-item").forEach(item => {
+            item.addEventListener("click", () => {
+                document.querySelectorAll(".bottom-nav .nav-item").forEach(i => i.classList.remove("active"));
+                item.classList.add("active");
+                const tab = item.getAttribute("data-tab");
+
+                // Tab switching logic
+                if (tab === "home") {
+                    document.getElementById("carousel-box").parentElement.style.display = "block";
+                    document.getElementById("category-chips-row").parentElement.style.display = "flex";
+                    document.getElementById("products-grid").style.display = "grid";
+                    document.querySelector(".section-header-row").style.display = "flex";
+                    document.querySelector(".guarantee-card").style.display = "flex";
+                    document.getElementById("accessories-view-container").style.display = "none";
+                    document.getElementById("profile-view-container").style.display = "none";
+                    setCategoryFilter("All");
+                } else if (tab === "category") {
+                    document.getElementById("carousel-box").parentElement.style.display = "none";
+                    document.getElementById("category-chips-row").parentElement.style.display = "flex";
+                    document.getElementById("products-grid").style.display = "grid";
+                    document.querySelector(".section-header-row").style.display = "flex";
+                    document.querySelector(".guarantee-card").style.display = "none";
+                    document.getElementById("accessories-view-container").style.display = "none";
+                    document.getElementById("profile-view-container").style.display = "none";
+                    setCategoryFilter("Laptops");
+                } else if (tab === "accessories") {
+                    document.getElementById("carousel-box").parentElement.style.display = "none";
+                    document.getElementById("category-chips-row").parentElement.style.display = "flex";
+                    document.getElementById("products-grid").style.display = "grid";
+                    document.querySelector(".section-header-row").style.display = "flex";
+                    document.querySelector(".guarantee-card").style.display = "none";
+                    document.getElementById("accessories-view-container").style.display = "none";
+                    document.getElementById("profile-view-container").style.display = "none";
+                    setCategoryFilter("Accessories");
+                } else if (tab === "cart") {
+                    openCart();
+                } else if (tab === "profile") {
+                    document.getElementById("carousel-box").parentElement.style.display = "none";
+                    document.getElementById("category-chips-row").parentElement.style.display = "none";
+                    document.getElementById("products-grid").style.display = "none";
+                    document.querySelector(".section-header-row").style.display = "none";
+                    document.querySelector(".guarantee-card").style.display = "none";
+                    document.getElementById("accessories-view-container").style.display = "none";
+                    document.getElementById("profile-view-container").style.display = "block";
+                }
+            });
+        });
+
+        // Modal Action Buttons
+        document.getElementById("modal-add-to-cart-btn").addEventListener("click", () => {
+            if (activeDetailProduct) {
+                addToCart(activeDetailProduct);
+                closeModal("product-detail-modal");
+            }
+        });
+
+        document.getElementById("modal-buy-now-btn").addEventListener("click", () => {
+            if (activeDetailProduct) {
+                closeModal("product-detail-modal");
+                addToCart(activeDetailProduct, true);
+            }
+        });
+
+        // Place Order Button in Cart Drawer
+        document.getElementById("place-order-btn").addEventListener("click", placeOrder);
+
+        // Save Interval in Admin
+        document.getElementById("save-interval-btn").addEventListener("click", () => {
+            const sec = parseInt(document.getElementById("admin-banner-interval-select").value);
+            bannerIntervalSec = sec;
+            localStorage.setItem("lps_banner_interval", sec);
+            document.getElementById("timer-sec-val").innerText = sec + "s";
+            document.getElementById("dash-banner-interval-text").innerText = sec + " Seconds";
+            startCarouselTimer();
+            showToast(`⏱️ Carousel interval set to ${sec}s`);
+        });
+
+        // Admin Tab switching
+        document.querySelectorAll(".admin-tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                switchAdminTab(btn.getAttribute("data-atab"));
+            });
+        });
+
+        // Admin Add Product Form Submit
+        document.getElementById("add-product-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const name = document.getElementById("add-prod-name").value.trim();
+            const cat = document.getElementById("add-prod-category").value;
+            const cond = document.getElementById("add-prod-condition").value;
+            const price = parseFloat(document.getElementById("add-prod-price").value) || 0;
+            const mrp = parseFloat(document.getElementById("add-prod-mrp").value) || (price * 1.3);
+            const cpu = document.getElementById("add-prod-processor").value.trim() || "High Performance";
+            const ram = document.getElementById("add-prod-ram").value.trim() || "8GB RAM";
+            const storage = document.getElementById("add-prod-storage").value.trim() || "256GB SSD";
+            const display = document.getElementById("add-prod-display").value.trim() || "FHD Display";
+            const img = document.getElementById("add-prod-image").value.trim() || "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600";
+            const desc = document.getElementById("add-prod-desc").value.trim() || "Original verified item with store warranty.";
+
+            const newProd = {
+                id: Date.now(),
+                name: name,
+                brand: name.split(" ")[0] || "Brand",
+                price: price,
+                mrp: mrp,
+                category: cat,
+                condition: cond,
+                imageUrl: img,
+                processor: cpu,
+                ram: ram,
+                storage: storage,
+                display: display,
+                rating: 4.5,
+                reviews: 12,
+                inStock: true,
+                desc: desc
+            };
+
+            products.unshift(newProd);
+            saveProducts();
+            renderProducts();
+            renderAdminProducts();
+            updateAdminStats();
+            document.getElementById("add-product-form").reset();
+            showToast("✅ Product saved to store!");
+            switchAdminTab("products");
+        });
+
+        // Admin Filter Search
+        document.getElementById("admin-product-search").addEventListener("input", (e) => {
+            renderAdminProducts(e.target.value);
+        });
+
+        // Click outside sheet to close
+        document.querySelectorAll(".modal-overlay").forEach(overlay => {
+            overlay.addEventListener("click", (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove("active");
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

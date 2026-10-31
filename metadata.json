@@ -1,0 +1,6 @@
+{
+  "name": "Laptops",
+  "description": "Your trusted laptop store with instant buy, pickup guarantee, and admin inventory management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
